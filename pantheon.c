@@ -7,6 +7,15 @@
 GLdouble phi = PI/2, theta = 0, radius = 30;
 float fAspect;
 double inc = 5*PI/180;
+char style = 's';
+
+void drawTriangle(){
+    glBegin(GL_TRIANGLES);
+        glVertex3f(-4.15,-1.5,10.3);
+        glVertex3f(4.15,-1.5,10.3);
+        glVertex3f(0,1,10.3);
+    glEnd();
+}
 
 void drawRect(char drawMode, GLfloat x, GLfloat y, GLfloat z, GLfloat sx, GLfloat sy, GLfloat sz){
     glPushMatrix();
@@ -109,40 +118,67 @@ void drawLinha(char drawMode, float x, float y, float z, int n, float espacament
 	}
 }
 
+void glColor255(float r, float g, float b){
+    glColor3f(r/255, g/255, b/255);
+}
+
 // Função callback chamada para fazer o desenho
 void desenha(void) {
-    char style = 's';
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     //Piso
-	glColor3f(0.51, 0.066, 0.12);
+	glColor255(89,87,84);
 	drawRect(style,0,-4.5,5,11,0.3,20);
 
 	//Rotunda
-    glColor3f(1, 1, 1);
+    glColor255(145,131,101);
 	drawDome(style,0,0,0,4.5,0,0.97);
 	drawDome(style,0,0,0,4.8,0,0.97);
 
-	//Cilindros
-	drawCylinderWithCut(style,0,-4.5,0,4.5,4.5,0.9);
+    //Cilindros
+    glColor255(191,169,135);
+    drawCylinderWithCut(style,0,-4.5,0,4.5,4.5,0.9);
 	drawCylinderWithCut(style,0,-4.5,0,4.8,4.5,0.9);
 
 	//Pórtico
-	glColor3f(1, 0, 0);
-	drawRect(style,4,-2.25,4.5,0.3,4.5,4);
-	drawRect(style,-4,-2.25,4.5,0.3,4.5,4);
-	drawRect(style,0,0,4.5,8.3,0.3,4);
+	glColor255(216,194,145);
+	drawRect(style,4,-1.25,4.5,0.3,6.5,4);
+	drawRect(style,-4,-1.25,4.5,0.3,6.5,4);
+	drawRect(style,0,2,4.5,8.3,0.3,4);
 
-	glColor3f(0, 1, 0);
-	drawRect(style,3,-2.25,6.35,2,4.5,0.3);
+    drawRect(style,3,-2.25,6.35,2,4.5,0.3);
 	drawRect(style,-3,-2.25,6.35,2,4.5,0.3);
-	drawRect(style,0,-1.125,6.35,8.3,2.25,0.3);
+	drawRect(style,0,-0.125,6.35,8.3,4.25,0.3);
 
-	glColor3f(0, 1, 1);
+    //Colunas
+	glColor255(145,131,101);
 	drawLinha(style,0,-4.5,6.85,8,1);
 	drawLinha(style,0,-4.5,7.85,8,1);
 	drawLinha(style,0,-4.5,8.85,8,1);
 	drawLinha(style,0,-4.5,9.85,8,1);
+
+    //Teto
+    drawRect(style,0,-1.5,8.5,8.3,0.3,4);
+    glColor255(140,93,22);
+    glPushMatrix();
+        glTranslatef(-2,-0.3,8.5);
+        glRotatef(30, 0, 0, 1);
+        drawRect(style,0,0,0,4.8,0.3,3.9);
+    glPopMatrix();
+
+    glPushMatrix();
+        glTranslatef(2,-0.3,8.5);
+        glRotatef(-30, 0, 0, 1);
+        drawRect(style,0,0,0,4.8,0.3,3.9);
+    glPopMatrix();
+
+    glColor255(191,169,135);
+
+    glBegin(GL_TRIANGLE_STRIP);
+        glVertex3f(-4.15,-1.5,10.3);
+        glVertex3f(4.15,-1.5,10.3);
+        glVertex3f(0,1,10.3);
+    glEnd();
 
 	glutSwapBuffers();
 }
@@ -197,6 +233,13 @@ void SpecialKeys(int key, int x, int y) {
                 break;
             case GLUT_KEY_PAGE_DOWN :
                 radius += 5;
+                break;
+            case GLUT_KEY_F1 :
+                if(style == 'w'){
+                    style = 's';
+                } else if(style == 's'){
+                    style = 'w';
+                }
                 break;
         }
         phi = phi - ((int)(phi/(2*PI)));
