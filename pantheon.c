@@ -7,42 +7,36 @@
 GLdouble phi = PI/2, theta = 0, radius = 30;
 float fAspect;
 double inc = 5*PI/180;
-char style = 's';
+int style = 0;
 
-void drawTriangle(){
-    glBegin(GL_TRIANGLES);
-        glVertex3f(-4.15,-1.5,10.3);
-        glVertex3f(4.15,-1.5,10.3);
-        glVertex3f(0,1,10.3);
-    glEnd();
-}
-
-void drawRect(char drawMode, GLfloat x, GLfloat y, GLfloat z, GLfloat sx, GLfloat sy, GLfloat sz){
+void drawTriangle(GLfloat x1, GLfloat y1, GLfloat x2, GLfloat y2, GLfloat x3, GLfloat y3, GLfloat z){
     glPushMatrix();
-        glTranslatef(x, y, z);
-        glScalef(sx, sy, sz);
-        if(drawMode == 'w') {
-            glutWireCube(1.0f);
-        } else if(drawMode == 's') {
-            glutSolidCube(1.0f);
-        }
+        glBegin(GL_TRIANGLES);
+            glVertex3f(x1,y1,z);
+            glVertex3f(x2,y2,z);
+            glVertex3f(x3,y3,z);
+        glEnd();
     glPopMatrix();
 }
 
-void drawSphere(char drawMode, GLfloat x, GLfloat y, GLfloat z, GLfloat radius){
+void drawRect(GLfloat x, GLfloat y, GLfloat z, GLfloat sx, GLfloat sy, GLfloat sz){
+    glPushMatrix();
+        glTranslatef(x, y, z);
+        glScalef(sx, sy, sz);
+        glutSolidCube(1.0f);
+    glPopMatrix();
+}
+
+void drawSphere(GLfloat x, GLfloat y, GLfloat z, GLfloat radius){
     glPushMatrix();
         glTranslatef(x, y, z);
         glScalef(radius, radius, radius);
         glRotatef(-90, 1, 0, 0);
-        if(drawMode == 'w') {
-            glutWireSphere(1.0f, 20, 20);
-        } else if(drawMode == 's') {
-            glutSolidSphere(1.0f, 20, 20);
-        }
+        glutSolidSphere(1.0f, 20, 20);
     glPopMatrix();
 }
 
-void drawDome(char drawMode, GLfloat x, GLfloat y, GLfloat z, GLfloat radius, GLfloat bottom, GLfloat top){
+void drawDome(GLfloat x, GLfloat y, GLfloat z, GLfloat radius, GLfloat bottom, GLfloat top){
     GLdouble eqnBottom[4] = {0.0, 0.0, 1.0, bottom};
     GLdouble eqnTop[4] = {0.0, 0.0, -1.0, top};
 
@@ -56,19 +50,14 @@ void drawDome(char drawMode, GLfloat x, GLfloat y, GLfloat z, GLfloat radius, GL
 
         glClipPlane (GL_CLIP_PLANE1, eqnTop);
         glEnable (GL_CLIP_PLANE1);
-
-        if(drawMode == 'w') {
-            glutWireSphere(1.0f, 20, 20);
-        } else if(drawMode == 's') {
-            glutSolidSphere(1.0f, 20, 20);
-        }
+        glutSolidSphere(1.0f, 20, 20);
 
         glDisable(GL_CLIP_PLANE0);
         glDisable(GL_CLIP_PLANE1);
     glPopMatrix();
 }
 
-void drawCylinder(char drawMode, GLfloat x, GLfloat y, GLfloat z, GLdouble radius, GLdouble height){
+void drawCylinder(GLfloat x, GLfloat y, GLfloat z, GLdouble radius, GLdouble height){
     GLUquadricObj *obj = gluNewQuadric();
 
     glPushMatrix();
@@ -76,16 +65,12 @@ void drawCylinder(char drawMode, GLfloat x, GLfloat y, GLfloat z, GLdouble radiu
         glRotatef(270.0, 1.0, 0.0, 0.0);
         glScalef(radius, radius, height);
 
-        if(drawMode == 'w') {
-            gluQuadricDrawStyle(obj, GLU_LINE);
-        } else if(drawMode == 's') {
-            gluQuadricDrawStyle(obj, GLU_FILL);
-        }
+        gluQuadricDrawStyle(obj, GLU_FILL);
         gluCylinder(obj, 1, 1, 1, 20, 2);
 	glPopMatrix();
 }
 
-void drawCylinderWithCut(char drawMode, GLfloat x, GLfloat y, GLfloat z, GLdouble radius, GLdouble height, GLfloat cut){
+void drawCylinderWithCut(GLfloat x, GLfloat y, GLfloat z, GLdouble radius, GLdouble height, GLfloat cut){
     GLUquadricObj *obj = gluNewQuadric();
     GLdouble eqn[4] = {0.0, 1.0, 0.0, cut};
 
@@ -97,24 +82,20 @@ void drawCylinderWithCut(char drawMode, GLfloat x, GLfloat y, GLfloat z, GLdoubl
         glClipPlane (GL_CLIP_PLANE0, eqn);
         glEnable (GL_CLIP_PLANE0);
 
-        if(drawMode == 'w') {
-            gluQuadricDrawStyle(obj, GLU_LINE);
-        } else if(drawMode == 's') {
-            gluQuadricDrawStyle(obj, GLU_FILL);
-        }
+        gluQuadricDrawStyle(obj, GLU_FILL);
         gluCylinder(obj, 1, 1, 1, 20, 2);
 
         glDisable(GL_CLIP_PLANE0);
     glPopMatrix();
 }
 
-void drawLinha(char drawMode, float x, float y, float z, int n, float espacamento){
+void drawLinha(float x, float y, float z, int n, float espacamento){
 	float start = espacamento/2;
 	float end = start + (n)/2 * espacamento;
 
 	for (float i = start; i < end; i+= espacamento){
-		drawCylinder(drawMode, x-i*espacamento, y, z, 0.2, 3);
-		drawCylinder(drawMode, x+i*espacamento, y, z, 0.2, 3);
+		drawCylinder(x-i*espacamento, y, z, 0.2, 3);
+		drawCylinder(x+i*espacamento, y, z, 0.2, 3);
 	}
 }
 
@@ -128,63 +109,60 @@ void desenha(void) {
 
     //Piso
 	glColor255(89,87,84);
-	drawRect(style,0,-4.5,5,11,0.3,20);
+	drawRect(0,-4.5,5,11,0.3,20);
 
 	//Rotunda
     glColor255(145,131,101);
-	drawDome(style,0,0,0,4.5,0,0.97);
-	drawDome(style,0,0,0,4.8,0,0.97);
+	drawDome(0,0,0,4.5,0,0.97);
+	drawDome(0,0,0,4.8,0,0.97);
 
     //Cilindros
     glColor255(191,169,135);
-    drawCylinderWithCut(style,0,-4.5,0,4.5,4.5,0.9);
-	drawCylinderWithCut(style,0,-4.5,0,4.8,4.5,0.9);
+    drawCylinderWithCut(0,-4.5,0,4.5,4.5,0.9);
+	drawCylinderWithCut(0,-4.5,0,4.8,4.5,0.9);
 
 	//Pórtico
 	glColor255(216,194,145);
-	drawRect(style,4,-1.25,4.5,0.3,6.5,4);
-	drawRect(style,-4,-1.25,4.5,0.3,6.5,4);
-	drawRect(style,0,2,4.5,8.3,0.3,4);
+	drawRect(4,-1.25,4.5,0.3,6.5,4);
+	drawRect(-4,-1.25,4.5,0.3,6.5,4);
+	drawRect(0,2,4.5,8.3,0.3,4);
 
-    drawRect(style,3,-2.25,6.35,2,4.5,0.3);
-	drawRect(style,-3,-2.25,6.35,2,4.5,0.3);
-	drawRect(style,0,-0.125,6.35,8.3,4.25,0.3);
+    drawRect(3,-2.25,6.35,2,4.5,0.3);
+	drawRect(-3,-2.25,6.35,2,4.5,0.3);
+	drawRect(0,-0.125,6.35,8.3,4.25,0.3);
 
     //Colunas
 	glColor255(145,131,101);
-	drawLinha(style,0,-4.5,6.85,8,1);
-	drawLinha(style,0,-4.5,7.85,8,1);
-	drawLinha(style,0,-4.5,8.85,8,1);
-	drawLinha(style,0,-4.5,9.85,8,1);
+	drawLinha(0,-4.5,6.85,8,1);
+	drawLinha(0,-4.5,7.85,8,1);
+	drawLinha(0,-4.5,8.85,8,1);
+	drawLinha(0,-4.5,9.85,8,1);
 
     //Teto
-    drawRect(style,0,-1.5,8.5,8.3,0.3,4);
+    drawRect(0,-1.5,8.5,8.3,0.3,4);
     glColor255(140,93,22);
     glPushMatrix();
         glTranslatef(-2,-0.3,8.5);
         glRotatef(30, 0, 0, 1);
-        drawRect(style,0,0,0,4.8,0.3,3.9);
+        drawRect(0,0,0,4.8,0.3,3.9);
     glPopMatrix();
 
     glPushMatrix();
         glTranslatef(2,-0.3,8.5);
         glRotatef(-30, 0, 0, 1);
-        drawRect(style,0,0,0,4.8,0.3,3.9);
+        drawRect(0,0,0,4.8,0.3,3.9);
     glPopMatrix();
 
     glColor255(191,169,135);
-
-    glBegin(GL_TRIANGLE_STRIP);
-        glVertex3f(-4.15,-1.5,10.3);
-        glVertex3f(4.15,-1.5,10.3);
-        glVertex3f(0,1,10.3);
-    glEnd();
+    drawTriangle(-4.15,-1.5,4.15,-1.5,0,1,10.3);
 
 	glutSwapBuffers();
 }
 
 void inicializa (void) {
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+    glEnable(GL_DEPTH_TEST);
+    glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
 }
 
 void visao(void) {
@@ -235,10 +213,12 @@ void SpecialKeys(int key, int x, int y) {
                 radius += 5;
                 break;
             case GLUT_KEY_F1 :
-                if(style == 'w'){
-                    style = 's';
-                } else if(style == 's'){
-                    style = 'w';
+                if(style == 0){
+                    glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
+                    style = 1;
+                } else if(style == 1){
+                    glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
+                    style = 0;
                 }
                 break;
         }
@@ -258,6 +238,5 @@ int main(int argc, char **argv) {
   glutReshapeFunc(AlteraTamanhoJanela);
   glutSpecialFunc(SpecialKeys);
   inicializa();
-  glEnable(GL_DEPTH_TEST);
   glutMainLoop();
 }
