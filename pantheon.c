@@ -26,25 +26,25 @@ void drawPyramid(GLfloat x, GLfloat y, GLfloat z, GLfloat sx, GLfloat sy, GLfloa
         glBegin( GL_TRIANGLES );
             glVertex3f(0.0f, 1.0f, 0.0f );
             glVertex3f(-1.0f, -1.0f, 1.0f );
-            glVertex3f(1.0f, -1.0f, 1.0f ); 
-            
-            glVertex3f(0.0f, 1.0f, 0.0f );  
-            glVertex3f(1.0f, -1.0f, 1.0f ); 
+            glVertex3f(1.0f, -1.0f, 1.0f );
+
+            glVertex3f(0.0f, 1.0f, 0.0f );
+            glVertex3f(1.0f, -1.0f, 1.0f );
             glVertex3f(1.0f, -1.0f, -1.0f );
-     
-            glVertex3f(0.0f, 1.0f, 0.0f);  
+
+            glVertex3f(0.0f, 1.0f, 0.0f);
             glVertex3f(1.0f, -1.0f, -1.0f);
             glVertex3f(-1.0f, -1.0f, -1.0f);
-     
+
             glVertex3f(0.0f, 1.0f, 0.0f );
             glVertex3f(-1.0f, -1.0f, -1.0f );
             glVertex3f(-1.0f, -1.0f, 1.0f );
         glEnd();
         glBegin( GL_QUADS );
-            glVertex3f( -1.0f, -1.0f, 1.0f );                                   
-            glVertex3f( 1.0f, -1.0f, 1.0f );                                    
-            glVertex3f( 1.0f, -1.0f, -1.0f );                                   
-            glVertex3f( -1.0f, -1.0f, -1.0f );                                  
+            glVertex3f( -1.0f, -1.0f, 1.0f );
+            glVertex3f( 1.0f, -1.0f, 1.0f );
+            glVertex3f( 1.0f, -1.0f, -1.0f );
+            glVertex3f( -1.0f, -1.0f, -1.0f );
         glEnd();
     glPopMatrix();
 }
@@ -168,6 +168,10 @@ void glColor255(float r, float g, float b){
 void desenha(void) {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+    //Piso
+    glColor255(89,87,84);
+    drawRect(0,-4.5,5,11,0.3,20);
+    
     //Rotunda
     glColor255(145,131,101);
 	drawDome(0,0,0,4.5,0,0.97);
@@ -216,7 +220,7 @@ void desenha(void) {
     //Mesa
     glColor255(140,93,22);
     drawRect(0, -4.05, -3, 2, 1, 1);
-    
+
     glColor255(216, 194, 104);
     drawLinhaVelas(0, -3.05, -3, 5, 0.4);
 
@@ -224,7 +228,7 @@ void desenha(void) {
     glColor255(255,215,0);
     drawRect(0, -2.5, -3, 0.08, 0.5, 0.08);
     drawRect(0, -2.4, -3, 0.3, 0.08, 0.08);
-    
+
 	glutSwapBuffers();
 }
 
