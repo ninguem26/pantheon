@@ -126,6 +126,18 @@ void drawCylinderWithCut(GLfloat x, GLfloat y, GLfloat z, GLdouble radius, GLdou
     glPopMatrix();
 }
 
+void drawDisk(GLfloat x, GLfloat y, GLfloat z, GLdouble innerRadius, GLdouble outerRadius){
+    GLUquadricObj *obj = gluNewQuadric();
+
+    glPushMatrix();
+        glTranslatef(x, y, z);
+        glRotatef(270.0, 1.0, 0.0, 0.0);
+
+        gluQuadricDrawStyle(obj, GLU_FILL);
+        gluCylinder(obj, outerRadius, innerRadius, 0, 6, 2);
+	glPopMatrix();
+}
+
 void drawLinha(float x, float y, float z, int n, float espacamento){
 	float start = espacamento/2;
 	float end = start + (n)/2 * espacamento;
@@ -172,7 +184,7 @@ void desenha(void) {
 
     //Piso
     glColor255(89,87,84);
-    drawRect(0,-4.5,5,11,0.3,20);
+    drawRect(0,-4.5,7,11,0.3,24);
 
     //Rotunda
     glColor255(145,131,101);
@@ -245,6 +257,22 @@ void desenha(void) {
     drawBench(-0.8,-4.1,-0.5,0.05,0,180,0);
     drawBench(2,-4.1,-0.5,0.05,0,180,0);
     drawBench(0.8,-4.1,-0.5,0.05,0,180,0);
+
+    //Ponta frontal
+    glColor255(142,130,118);
+    drawCylinder(0,-4.5,15,1.5,0.5);
+    drawCylinder(0,-4.5,15,1.3,0.5);
+    drawDisk(0,-4.25,15,1.3,1.5);
+    glColor255(137,121,104);
+    drawRect(0,-4.,15,0.75,0.75,0.75);
+    glColor255(107,93,79);
+    drawPyramid(0,-2,15,0.2,2,0.2);
+    glColor255(0,255,255);
+    drawDisk(0,-4.25,15,0.2,1.3);
+
+    //Porta
+    glColor255(102,45,25);
+    drawRect(0,-3.375,6.35,4,2.25,0.15);
 
 	glutSwapBuffers();
 }
