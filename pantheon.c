@@ -99,6 +99,30 @@ void drawLinha(float x, float y, float z, int n, float espacamento){
 	}
 }
 
+void drawBench(GLfloat x, GLfloat y, GLfloat z, GLfloat scale, GLfloat rx, GLfloat ry, GLfloat rz){
+    glTranslatef(x, y, z);
+    glRotatef(rx, 1, 0, 0);
+    glRotatef(ry, 0, 1, 0);
+    glRotatef(rz, 0, 0, 1);
+    glScalef(scale, scale, scale);
+
+    //Assento
+    drawRect(0,0,0,20,0.5,5);
+    //Pernas
+    drawRect(-9.3,-2,-1.8,1,4,1);
+    drawRect(-9.3,-2,1.8,1,4,1);
+    drawRect(9.3,-2,-1.8,1,4,1);
+    drawRect(9.3,-2,1.8,1,4,1);
+    drawRect(0,-2,-1.8,1,4,1);
+    drawRect(0,-2,1.8,1,4,1);
+    //Encosto
+    drawRect(0,3,-2.1,20,3,0.5);
+    //Suportes
+    drawRect(0,2,-2.5,0.5,4,0.5);
+    drawRect(-8.3,2,-2.5,0.5,4,0.5);
+    drawRect(8.3,2,-2.5,0.5,4,0.5);
+}
+
 void glColor255(float r, float g, float b){
     glColor3f(r/255, g/255, b/255);
 }
@@ -107,11 +131,7 @@ void glColor255(float r, float g, float b){
 void desenha(void) {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    //Piso
-	glColor255(89,87,84);
-	drawRect(0,-4.5,5,11,0.3,20);
-
-	//Rotunda
+    //Rotunda
     glColor255(145,131,101);
 	drawDome(0,0,0,4.5,0,0.97);
 	drawDome(0,0,0,4.8,0,0.97);
@@ -210,7 +230,7 @@ void SpecialKeys(int key, int x, int y) {
                 if(radius - 1 > 2) radius -= 1;
                 break;
             case GLUT_KEY_PAGE_DOWN :
-                radius += 5;
+                radius += 1;
                 break;
             case GLUT_KEY_F1 :
                 if(style == 0){
