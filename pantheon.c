@@ -137,27 +137,29 @@ void drawLinha(float x, float y, float z, int n, float espacamento){
 }
 
 void drawBench(GLfloat x, GLfloat y, GLfloat z, GLfloat scale, GLfloat rx, GLfloat ry, GLfloat rz){
-    glTranslatef(x, y, z);
-    glRotatef(rx, 1, 0, 0);
-    glRotatef(ry, 0, 1, 0);
-    glRotatef(rz, 0, 0, 1);
-    glScalef(scale, scale, scale);
+    glPushMatrix();
+        glTranslatef(x, y, z);
+        glRotatef(rx, 1, 0, 0);
+        glRotatef(ry, 0, 1, 0);
+        glRotatef(rz, 0, 0, 1);
+        glScalef(scale, scale, scale);
 
-    //Assento
-    drawRect(0,0,0,20,0.5,5);
-    //Pernas
-    drawRect(-9.3,-2,-1.8,1,4,1);
-    drawRect(-9.3,-2,1.8,1,4,1);
-    drawRect(9.3,-2,-1.8,1,4,1);
-    drawRect(9.3,-2,1.8,1,4,1);
-    drawRect(0,-2,-1.8,1,4,1);
-    drawRect(0,-2,1.8,1,4,1);
-    //Encosto
-    drawRect(0,3,-2.1,20,3,0.5);
-    //Suportes
-    drawRect(0,2,-2.5,0.5,4,0.5);
-    drawRect(-8.3,2,-2.5,0.5,4,0.5);
-    drawRect(8.3,2,-2.5,0.5,4,0.5);
+        //Assento
+        drawRect(0,0,0,20,0.5,5);
+        //Pernas
+        drawRect(-9.3,-2,-1.8,1,4,1);
+        drawRect(-9.3,-2,1.8,1,4,1);
+        drawRect(9.3,-2,-1.8,1,4,1);
+        drawRect(9.3,-2,1.8,1,4,1);
+        drawRect(0,-2,-1.8,1,4,1);
+        drawRect(0,-2,1.8,1,4,1);
+        //Encosto
+        drawRect(0,3,-2.1,20,3,0.5);
+        //Suportes
+        drawRect(0,2,-2.5,0.5,4,0.5);
+        drawRect(-8.3,2,-2.5,0.5,4,0.5);
+        drawRect(8.3,2,-2.5,0.5,4,0.5);
+    glPopMatrix();
 }
 
 void glColor255(float r, float g, float b){
@@ -171,7 +173,7 @@ void desenha(void) {
     //Piso
     glColor255(89,87,84);
     drawRect(0,-4.5,5,11,0.3,20);
-    
+
     //Rotunda
     glColor255(145,131,101);
 	drawDome(0,0,0,4.5,0,0.97);
@@ -224,10 +226,25 @@ void desenha(void) {
     glColor255(216, 194, 104);
     drawLinhaVelas(0, -3.05, -3, 5, 0.4);
 
-    //cruz
+    //Cruz
     glColor255(255,215,0);
     drawRect(0, -2.5, -3, 0.08, 0.5, 0.08);
     drawRect(0, -2.4, -3, 0.3, 0.08, 0.08);
+
+    //Cadeiras
+    glColor255(140,93,22);
+    drawBench(-2,-4.1,-1.5,0.05,0,180,0);
+    drawBench(-0.8,-4.1,-1.5,0.05,0,180,0);
+    drawBench(2,-4.1,-1.5,0.05,0,180,0);
+    drawBench(0.8,-4.1,-1.5,0.05,0,180,0);
+    drawBench(-2,-4.1,-1,0.05,0,180,0);
+    drawBench(-0.8,-4.1,-1,0.05,0,180,0);
+    drawBench(2,-4.1,-1,0.05,0,180,0);
+    drawBench(0.8,-4.1,-1,0.05,0,180,0);
+    drawBench(-2,-4.1,-0.5,0.05,0,180,0);
+    drawBench(-0.8,-4.1,-0.5,0.05,0,180,0);
+    drawBench(2,-4.1,-0.5,0.05,0,180,0);
+    drawBench(0.8,-4.1,-0.5,0.05,0,180,0);
 
 	glutSwapBuffers();
 }
