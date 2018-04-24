@@ -9,7 +9,7 @@ float fAspect;
 double inc = 5*PI/180;
 int style = 0;
 
-void drawTriangle(GLfloat x1, GLfloat y1, GLfloat x2, GLfloat y2, GLfloat x3, GLfloat y3, GLfloat z){
+void drawTriangle(GLfloat x1, GLfloat y1, GLfloat x2, GLfloat y2, GLfloat x3, GLfloat y3, GLfloat z)    {
     glPushMatrix();
         glBegin(GL_TRIANGLES);
             glVertex3f(x1,y1,z);
@@ -17,6 +17,43 @@ void drawTriangle(GLfloat x1, GLfloat y1, GLfloat x2, GLfloat y2, GLfloat x3, GL
             glVertex3f(x3,y3,z);
         glEnd();
     glPopMatrix();
+}
+
+void drawPyramid(GLfloat x, GLfloat y, GLfloat z, GLfloat sx, GLfloat sy, GLfloat sz){
+    glPushMatrix();
+        glTranslatef(x, y, z);
+        glScalef(sx, sy, sz);
+        glBegin( GL_TRIANGLES );
+            glVertex3f(0.0f, 1.0f, 0.0f );
+            glVertex3f(-1.0f, -1.0f, 1.0f );
+            glVertex3f(1.0f, -1.0f, 1.0f ); 
+            
+            glVertex3f(0.0f, 1.0f, 0.0f );  
+            glVertex3f(1.0f, -1.0f, 1.0f ); 
+            glVertex3f(1.0f, -1.0f, -1.0f );
+     
+            glVertex3f(0.0f, 1.0f, 0.0f);  
+            glVertex3f(1.0f, -1.0f, -1.0f);
+            glVertex3f(-1.0f, -1.0f, -1.0f);
+     
+            glVertex3f(0.0f, 1.0f, 0.0f );
+            glVertex3f(-1.0f, -1.0f, -1.0f );
+            glVertex3f(-1.0f, -1.0f, 1.0f );
+        glEnd();
+        glBegin( GL_QUADS );
+            glVertex3f( -1.0f, -1.0f, 1.0f );                                   
+            glVertex3f( 1.0f, -1.0f, 1.0f );                                    
+            glVertex3f( 1.0f, -1.0f, -1.0f );                                   
+            glVertex3f( -1.0f, -1.0f, -1.0f );                                  
+        glEnd();
+    glPopMatrix();
+}
+
+void drawLinhaVelas(GLfloat x, GLfloat y, GLfloat z, int n, double espacamento){
+    for (int i = 0; i < n/2+1; i+= 1){
+        drawPyramid(x-i*espacamento, y, z, 0.1, 0.5, 0.1);
+        drawPyramid(x+i*espacamento, y, z, 0.1, 0.5, 0.1);
+    }
 }
 
 void drawRect(GLfloat x, GLfloat y, GLfloat z, GLfloat sx, GLfloat sy, GLfloat sz){
@@ -66,7 +103,7 @@ void drawCylinder(GLfloat x, GLfloat y, GLfloat z, GLdouble radius, GLdouble hei
         glScalef(radius, radius, height);
 
         gluQuadricDrawStyle(obj, GLU_FILL);
-        gluCylinder(obj, 1, 1, 1, 20, 2);
+        gluCylinder(obj, 1, 1, 1, 6, 2);
 	glPopMatrix();
 }
 
@@ -156,6 +193,18 @@ void desenha(void) {
     glColor255(191,169,135);
     drawTriangle(-4.15,-1.5,4.15,-1.5,0,1,10.3);
 
+    //Mesa
+    glColor255(140,93,22);
+    drawRect(0, -4.05, -3, 2, 1, 1);
+    
+    glColor255(216, 194, 104);
+    drawLinhaVelas(0, -3.05, -3, 5, 0.4);
+
+    //cruz
+    glColor255(255,215,0);
+    drawRect(0, -2.5, -3, 0.08, 0.5, 0.08);
+    drawRect(0, -2.4, -3, 0.3, 0.08, 0.08);
+    
 	glutSwapBuffers();
 }
 
