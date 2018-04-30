@@ -5,7 +5,7 @@
 #define FILL 1
 
 // Camera
-GLdouble phi = M_PI / 2, theta = 0, radius = 30;
+GLdouble phi = M_PI / 2, theta = 0, radius = 15;
 
 GLfloat fAspect;
 
@@ -111,7 +111,7 @@ void drawCylinder(GLfloat x, GLfloat y, GLfloat z, GLdouble radius, GLdouble hei
 
         gluQuadricDrawStyle(obj, GLU_FILL);
         gluCylinder(obj, 1, 1, 1, 6, 2);
-	glPopMatrix();
+  glPopMatrix();
 }
 
 void drawCylinderWithCut(GLfloat x, GLfloat y, GLfloat z, GLdouble radius, GLdouble height, GLfloat cut) {
@@ -152,7 +152,7 @@ void drawColumnLine(float x, float y, float z, int n, float spacing) {
   for (float i = start; i < end; i+= spacing){
     drawCylinder(x - i * spacing, y, z, 0.2, 3);
     drawCylinder(x + i * spacing, y, z, 0.2, 3);
-	}
+  }
 }
 
 void drawBench(GLfloat x, GLfloat y, GLfloat z, GLfloat scale, GLfloat rx, GLfloat ry, GLfloat rz) {
@@ -197,6 +197,41 @@ void drawDoor(){
   glPopMatrix();
 }
 
+void drawOratorio(){
+  rgb(145,131,101);
+  drawRect(0, -4.3, 0, 1.4, 0.4, 0.7);
+
+  drawCylinder(0.6, -4.3, 0, .1, 2);
+  drawCylinder(-0.6, -4.3, 0, .1, 2);
+
+  //Telhado
+  drawRect(0, -2.3, 0, 1.4, 0.3, 0.5);
+  
+  glPushMatrix();
+    glTranslatef(0, -1.9, 0);
+    glScalef(.2, .2, .3);
+
+    rgb(140,93,22);
+    glPushMatrix();
+      glTranslatef(-2, -0.3, 0);
+      glRotatef(30, 0, 0, 1);
+      drawRect(0, 0, 0, 4.8, 0.3, 3.9);
+    glPopMatrix();
+
+    glPushMatrix();
+      glTranslatef(2, -0.3, 0);
+      glRotatef(-30, 0, 0, 1);
+      drawRect(0, 0, 0, 4.8, 0.3, 3.9);
+    glPopMatrix();
+  
+  drawTriangle(-4.15, -1.5, 4.15, -1.5, 0, 1, 1.4);
+
+  glPopMatrix();
+
+  rgb(1, 1, 1);
+  drawRect(0, -3.5, 0, 0.7, 1.4, 0.1);
+}
+
 // Função callback chamada para gerenciar eventos do mouse
 void mouseFunc(int button, int state, int x, int y) {
     if (button == GLUT_LEFT_BUTTON)
@@ -213,10 +248,14 @@ void desenha(void) {
   rgb(89,87,84);
   drawRect(0, -4.5, 7, 11, 0.3, 24);
 
+  /*
+
   //Rotunda
   rgb(145,131,101);
   drawDome(0, 0, 0, 4.5, 0,0.97);
   drawDome(0, 0, 0, 4.8, 0, 0.97);
+
+  */
 
   //Cilindros
   rgb(191,169,135);
@@ -284,6 +323,20 @@ void desenha(void) {
   drawBench(-0.8, -4.1, -0.5, 0.05, 0, 180,0);
   drawBench(2, -4.1, -0.5, 0.05, 0, 180, 0);
   drawBench(0.8, -4.1, -0.5, 0.05, 0, 180, 0);
+
+  //Oratorio
+
+  glPushMatrix();
+    glTranslatef(-2.3, 0, -3);
+    glRotatef(45, 0, 1, 0);
+    drawOratorio();  
+  glPopMatrix();
+
+  glPushMatrix();
+    glTranslatef(2.3, 0, -3);
+    glRotatef(-45, 0, 1, 0);
+    drawOratorio();  
+  glPopMatrix();
 
   //Obelisco
   rgb(142, 130, 118);
