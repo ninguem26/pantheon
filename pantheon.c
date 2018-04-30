@@ -9,6 +9,10 @@ float fAspect;
 double inc = 5*PI/180;
 int style = 0;
 
+void glColor255(float r, float g, float b){
+    glColor3f(r/255, g/255, b/255);
+}
+
 void drawTriangle(GLfloat x1, GLfloat y1, GLfloat x2, GLfloat y2, GLfloat x3, GLfloat y3, GLfloat z)    {
     glPushMatrix();
         glBegin(GL_TRIANGLES);
@@ -174,8 +178,29 @@ void drawBench(GLfloat x, GLfloat y, GLfloat z, GLfloat scale, GLfloat rx, GLflo
     glPopMatrix();
 }
 
-void glColor255(float r, float g, float b){
-    glColor3f(r/255, g/255, b/255);
+void drawCandelabro(GLfloat x, GLfloat y, GLfloat z, GLfloat scale){
+    glPushMatrix();
+        glTranslatef(x, y, z);
+        glScalef(scale, scale, scale);
+
+        glColor255(255,255,0);
+        drawCylinder(0,0,0,0.2,0.2);
+        drawDisk(0,0.2,0,0,0.2);
+        drawCylinder(0,0.2,0,0.05,1);
+        drawRect(0,0.8,0,0.7,0.06,0.06);
+        drawRect(0,0.4,0,0.9,0.06,0.06);
+        drawDisk(0.4,0.43,0,0,0.1);
+        drawDisk(-0.4,0.43,0,0,0.1);
+        drawDisk(0.3,0.83,0,0,0.1);
+        drawDisk(-0.3,0.83,0,0,0.1);
+        drawDisk(0,1.2,0,0,0.1);
+        glColor255(255,255,255);
+        drawRect(0.3,0.93,0,0.05,0.2,0.05);
+        drawRect(-0.3,0.93,0,0.05,0.2,0.05);
+        drawRect(0.4,0.53,0,0.05,0.2,0.05);
+        drawRect(-0.4,0.53,0,0.05,0.2,0.05);
+        drawRect(0,1.3,0,0.05,0.2,0.05);
+    glPopMatrix();
 }
 
 // Função callback chamada para fazer o desenho
@@ -273,6 +298,11 @@ void desenha(void) {
     //Porta
     glColor255(102,45,25);
     drawRect(0,-3.375,6.35,4,2.25,0.15);
+
+    //Candelabros
+    drawCandelabro(0,-4.5,0,1);
+
+
 
 	glutSwapBuffers();
 }
