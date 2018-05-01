@@ -1,5 +1,6 @@
 #include <GL/glut.h>
 #include <math.h>
+#include <stdbool.h>
 
 #define WIRE 0
 #define FILL 1
@@ -15,6 +16,10 @@ int style = 0;    // Wireframe or solid
 
 GLdouble doorAngle = 0;     // Door angle
 bool openingDoor = false;    // Door opening flag
+
+void rgb(float r, float g, float b){
+  glColor3f(r/255, g/255, b/255);
+}
 
 void drawTriangle(GLfloat x1, GLfloat y1, GLfloat x2, GLfloat y2, GLfloat x3, GLfloat y3, GLfloat z) {
   glBegin(GL_TRIANGLES);
@@ -184,12 +189,13 @@ void drawBench(GLfloat x, GLfloat y, GLfloat z, GLfloat scale, GLfloat rx, GLflo
   glPopMatrix();
 }
 
-void drawCandelabro(GLfloat x, GLfloat y, GLfloat z, GLfloat scale){
+void drawCandelabro(GLfloat x, GLfloat y, GLfloat z, GLfloat scale, GLfloat angle){
     glPushMatrix();
         glTranslatef(x, y, z);
         glScalef(scale, scale, scale);
+        glRotatef(angle, 0, 1, 0);
 
-        glColor255(255,255,0);
+        rgb(255,255,0);
         drawCylinder(0,0,0,0.2,0.2);
         drawDisk(0,0.2,0,0,0.2);
         drawCylinder(0,0.2,0,0.05,1);
@@ -200,17 +206,13 @@ void drawCandelabro(GLfloat x, GLfloat y, GLfloat z, GLfloat scale){
         drawDisk(0.3,0.83,0,0,0.1);
         drawDisk(-0.3,0.83,0,0,0.1);
         drawDisk(0,1.2,0,0,0.1);
-        glColor255(255,255,255);
+        rgb(255,255,255);
         drawRect(0.3,0.93,0,0.05,0.2,0.05);
         drawRect(-0.3,0.93,0,0.05,0.2,0.05);
         drawRect(0.4,0.53,0,0.05,0.2,0.05);
         drawRect(-0.4,0.53,0,0.05,0.2,0.05);
         drawRect(0,1.3,0,0.05,0.2,0.05);
     glPopMatrix();
-}
-
-void rgb(float r, float g, float b){
-  glColor3f(r/255, g/255, b/255);
 }
 
 void drawDoor(){
@@ -273,14 +275,10 @@ void desenha(void) {
   rgb(89,87,84);
   drawRect(0, -4.5, 7, 11, 0.3, 24);
 
-  /*
-
   //Rotunda
   rgb(145,131,101);
   drawDome(0, 0, 0, 4.5, 0,0.97);
   drawDome(0, 0, 0, 4.8, 0, 0.97);
-
-  */
 
   //Cilindros
   rgb(191,169,135);
@@ -385,6 +383,12 @@ void desenha(void) {
     glTranslatef(-2, -3.375, 6.35);
     drawDoor();
   glPopMatrix();
+
+  //Candelabros
+  drawCandelabro(4,-4.3,0,1,90);
+  drawCandelabro(-4,-4.3,0,1,90);
+  drawCandelabro(3,-4.3,5.3,1,90);
+  drawCandelabro(-3,-4.3,5.3,1,90);
 
   glutSwapBuffers();
 }
