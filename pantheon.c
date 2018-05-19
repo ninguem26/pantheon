@@ -286,13 +286,13 @@ void desenha(void) {
   drawCylinderWithCut(0, -4.5, 0, 4.8, 4.5, 0.85);
 
   rgb(216,194,145);
-  drawRect(4, -1.25, 4.5, 0.3, 6.5, 4);
-  drawRect(-4, -1.25, 4.5, 0.3, 6.5, 4);
+  drawRect(4, -1.25, 4.5, 0.3, 6.3, 4);
+  drawRect(-4, -1.25, 4.5, 0.3, 6.3, 4);
   drawRect(0, 2, 4.5, 8.3, 0.3, 4);
 
   drawRect(3, -2.25, 6.35, 2, 4.5, 0.3);
   drawRect(-3, -2.25, 6.35, 2, 4.5, 0.3);
-  drawRect(0, -0.125, 6.35, 8.3, 4.25, 0.3);
+  drawRect(0, -0.125, 6.35, 7.7, 4.1, 0.3);
 
   //Colunas
   rgb(145,131,101);
@@ -394,9 +394,33 @@ void desenha(void) {
 }
 
 void inicializa (void) {
-    glClearColor(0, 0, 0, 1);
-    glEnable(GL_DEPTH_TEST);
-    glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
+  GLfloat luzAmbiente[4] = {0.2, 0.2, 0.2, 1.0}; 
+  GLfloat luzDifusa[4]={0.4, 0.4, 0.4, 1.0};
+  GLfloat posicaoLuz[4]={0.0, 50.0, 0.0, 1.0};
+
+  glShadeModel(GL_SMOOTH);
+
+  // Ativa o uso da luz ambiente 
+  glLightModelfv(GL_LIGHT_MODEL_AMBIENT, luzAmbiente);
+
+  // Define os parâmetros da luz de número 0
+  glLightfv(GL_LIGHT0, GL_AMBIENT, luzAmbiente); 
+  glLightfv(GL_LIGHT0, GL_DIFFUSE, luzDifusa );
+  glLightfv(GL_LIGHT0, GL_POSITION, posicaoLuz );
+
+  // Habilita a definição da cor do material a partir da cor corrente
+  glEnable(GL_COLOR_MATERIAL);
+  //Habilita o uso de iluminação
+  glEnable(GL_LIGHTING);  
+  // Habilita a luz de número 0
+  glEnable(GL_LIGHT0);
+  // Habilita o depth-buffering
+
+  glClearColor(0, 0, 0, 1);
+
+  glEnable(GL_DEPTH_TEST);
+  
+  glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
 }
 
 void visao(void) {
