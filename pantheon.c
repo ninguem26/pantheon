@@ -1,6 +1,7 @@
 #include <GL/glut.h>
 #include <math.h>
 #include <stdbool.h>
+#include <SFML/Graphics.hpp>
 
 #define WIRE 0
 #define FILL 1
@@ -16,6 +17,28 @@ int style = 0;    // Wireframe or solid
 
 GLdouble doorAngle = 0;     // Door angle
 bool openingDoor = false;    // Door opening flag
+
+GLuint texture_handle[10];
+
+void loadTexture(GLuint texture, const char* filename)
+{
+    sf::Image img;
+    img.loadFromFile(filename);
+
+   glBindTexture(GL_TEXTURE_2D, texture);
+
+   glTexImage2D(
+       GL_TEXTURE_2D, 0, GL_RGBA,
+       img.getSize().x, img.getSize().y,
+       0,
+       GL_RGBA, GL_UNSIGNED_BYTE, img.getPixelsPtr()
+   );
+
+   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+}
 
 void rgb(float r, float g, float b){
   glColor3f(r/255, g/255, b/255);
@@ -73,7 +96,39 @@ void drawRect(GLfloat x, GLfloat y, GLfloat z, GLfloat sx, GLfloat sy, GLfloat s
   glPushMatrix();
     glTranslatef(x, y, z);
     glScalef(sx, sy, sz);
-    glutSolidCube(1);
+    //glutSolidCube(1);
+    glBegin(GL_QUADS);
+    // Frente
+    glTexCoord2f(1.0f, 0.0f); glVertex3f(0.5f, -0.5f, 0.5f);
+    glTexCoord2f(1.0f, 1.0f); glVertex3f(0.5f, 0.5f, 0.5f);
+    glTexCoord2f(0.0f, 1.0f); glVertex3f(-0.5f, 0.5f, 0.5f);
+    glTexCoord2f(0.0f, 0.0f); glVertex3f(-0.5f, -0.5f, 0.5f);
+    // Trás
+    glTexCoord2f(1.0f, 0.0f); glVertex3f(0.5f, -0.5f, -0.5f);
+    glTexCoord2f(1.0f, 1.0f); glVertex3f(0.5f,  0.5f, -0.5f);
+    glTexCoord2f(0.0f, 1.0f); glVertex3f(-0.5f,  0.5f, -0.5f);
+    glTexCoord2f(0.0f, 0.0f); glVertex3f(-0.5f, -0.5f, -0.5f);
+    // Direita
+    glTexCoord2f(1.0f, 0.0f); glVertex3f(0.5f, -0.5f, -0.5f);
+    glTexCoord2f(1.0f, 1.0f); glVertex3f(0.5f, 0.5f, -0.5f);
+    glTexCoord2f(0.0f, 1.0f); glVertex3f(0.5f, 0.5f, 0.5f);
+    glTexCoord2f(0.0f, 0.0f); glVertex3f(0.5f, -0.5f, 0.5f);
+    // Esquerda
+    glTexCoord2f(1.0f, 0.0f); glVertex3f(-0.5f, -0.5f, -0.5f);
+    glTexCoord2f(1.0f, 1.0f); glVertex3f(-0.5f, 0.5f, -0.5f);
+    glTexCoord2f(0.0f, 1.0f); glVertex3f(-0.5f, 0.5f, 0.5f);
+    glTexCoord2f(0.0f, 0.0f); glVertex3f(-0.5f, -0.5f, 0.5f);
+    // Cima
+    glTexCoord2f(1.0f, 0.0f); glVertex3f(0.5f, 0.5f, 0.5f);
+    glTexCoord2f(1.0f, 1.0f); glVertex3f(0.5f, 0.5f, -0.5f);
+    glTexCoord2f(0.0f, 1.0f); glVertex3f(-0.5f, 0.5f, -0.5f);
+    glTexCoord2f(0.0f, 0.0f); glVertex3f(-0.5f, 0.5f, 0.5f);
+    // Baixo
+    glTexCoord2f(1.0f, 0.0f); glVertex3f(0.5f, -0.5f, 0.5f);
+    glTexCoord2f(1.0f, 1.0f); glVertex3f(0.5f, -0.5f, -0.5f);
+    glTexCoord2f(0.0f, 1.0f); glVertex3f(-0.5f, -0.5f, -0.5f);
+    glTexCoord2f(0.0f, 0.0f); glVertex3f(-0.5f, -0.5f, 0.5f);
+    glEnd();
   glPopMatrix();
 }
 
@@ -271,6 +326,7 @@ void mouseFunc(int button, int state, int x, int y) {
 void desenha(void) {
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+  glBindTexture(GL_TEXTURE_2D, texture_handle[1]);
   //Piso
   rgb(89,87,84);
   drawRect(0, -4.5, 7, 11, 0.3, 24);
@@ -301,6 +357,7 @@ void desenha(void) {
   drawColumnLine(0, -4.5, 8.85, 8, 1);
   drawColumnLine(0, -4.5, 9.85, 8,1);
 
+  glBindTexture(GL_TEXTURE_2D, texture_handle[0]);
   //Telhado
   drawRect(0, -1.5, 8.5, 8.3, 0.3, 4);
 
@@ -394,24 +451,24 @@ void desenha(void) {
 }
 
 void inicializa (void) {
-  GLfloat luzAmbiente[4] = {0.2, 0.2, 0.2, 1.0}; 
+  GLfloat luzAmbiente[4] = {0.2, 0.2, 0.2, 1.0};
   GLfloat luzDifusa[4]={0.4, 0.4, 0.4, 1.0};
   GLfloat posicaoLuz[4]={0.0, 50.0, 0.0, 1.0};
 
   glShadeModel(GL_SMOOTH);
 
-  // Ativa o uso da luz ambiente 
+  // Ativa o uso da luz ambiente
   glLightModelfv(GL_LIGHT_MODEL_AMBIENT, luzAmbiente);
 
   // Define os parâmetros da luz de número 0
-  glLightfv(GL_LIGHT0, GL_AMBIENT, luzAmbiente); 
+  glLightfv(GL_LIGHT0, GL_AMBIENT, luzAmbiente);
   glLightfv(GL_LIGHT0, GL_DIFFUSE, luzDifusa );
   glLightfv(GL_LIGHT0, GL_POSITION, posicaoLuz );
 
   // Habilita a definição da cor do material a partir da cor corrente
   glEnable(GL_COLOR_MATERIAL);
   //Habilita o uso de iluminação
-  glEnable(GL_LIGHTING);  
+  glEnable(GL_LIGHTING);
   // Habilita a luz de número 0
   glEnable(GL_LIGHT0);
   // Habilita o depth-buffering
@@ -419,7 +476,21 @@ void inicializa (void) {
   glClearColor(0, 0, 0, 1);
 
   glEnable(GL_DEPTH_TEST);
-  
+
+  glEnable(GL_TEXTURE_2D);
+  glEnable(GL_BLEND);
+  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+  glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+
+  sf::Image img_data[2];
+  img_data[0].loadFromFile("stones.jpg");
+  img_data[1].loadFromFile("old_wall.jpg");
+  glGenTextures(2, texture_handle);
+
+  loadTexture(texture_handle[0], "stones.jpg");
+  loadTexture(texture_handle[1], "old_wall.jpg");
+
   glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
 }
 
