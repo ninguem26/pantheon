@@ -506,27 +506,17 @@ void inicializa (void) {
 
   glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
-  sf::Image img_data[9];
-  img_data[0].loadFromFile("concrete.jpg");
-  img_data[1].loadFromFile("wood.jpg");
-  img_data[2].loadFromFile("gold.jpg");
-  img_data[3].loadFromFile("marble.jpg");
-  img_data[4].loadFromFile("wall.jpg");
-  img_data[5].loadFromFile("statue.png");
-  img_data[6].loadFromFile("agua.jpg");
-  img_data[7].loadFromFile("interior.png");
-  img_data[8].loadFromFile("rotunda.png");
   glGenTextures(9, texture_handle);
 
-  loadTexture(texture_handle[0], "concrete.jpg");
-  loadTexture(texture_handle[1], "wood.jpg");
-  loadTexture(texture_handle[2], "gold.jpg");
-  loadTexture(texture_handle[3], "marble.jpg");
-  loadTexture(texture_handle[4], "wall.jpg");
-  loadTexture(texture_handle[5], "statue.png");
-  loadTexture(texture_handle[6], "agua.jpg");
-  loadTexture(texture_handle[7], "interior.png");
-  loadTexture(texture_handle[8], "rotunda.png");
+  loadTexture(texture_handle[0], "img/concrete.jpg");
+  loadTexture(texture_handle[1], "img/wood.jpg");
+  loadTexture(texture_handle[2], "img/gold.jpg");
+  loadTexture(texture_handle[3], "img/marble.jpg");
+  loadTexture(texture_handle[4], "img/wall.jpg");
+  loadTexture(texture_handle[5], "img/statue.png");
+  loadTexture(texture_handle[6], "img/agua.jpg");
+  loadTexture(texture_handle[7], "img/interior.png");
+  loadTexture(texture_handle[8], "img/rotunda.png");
   glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
 }
 
