@@ -41,14 +41,14 @@ void loadTexture(GLuint texture, const char* filename)
 }
 
 void rgb(float r, float g, float b){
-  glColor3f(r/255, g/255, b/255);
+  //glColor3f(r/255, g/255, b/255);
 }
 
 void drawTriangle(GLfloat x1, GLfloat y1, GLfloat x2, GLfloat y2, GLfloat x3, GLfloat y3, GLfloat z) {
   glBegin(GL_TRIANGLES);
-    glVertex3f(x1,y1,z);
-    glVertex3f(x2,y2,z);
-    glVertex3f(x3,y3,z);
+    glTexCoord2f(0.0f, 0.0f); glVertex3f(x1,y1,z);
+    glTexCoord2f(1.0f, 0.0f); glVertex3f(x2,y2,z);
+    glTexCoord2f(0.0f, 1.0f); glVertex3f(x3,y3,z);
   glEnd();
 }
 
@@ -59,28 +59,28 @@ void drawPyramid(GLfloat x, GLfloat y, GLfloat z, GLfloat sx, GLfloat sy, GLfloa
     glScalef(sx, sy, sz);
 
     glBegin(GL_TRIANGLES);
-      glVertex3i(0, 1, 0);
-      glVertex3i(-1, -1, 1);
-      glVertex3i(1, -1, 1);
+      glTexCoord2f(0.0f, 0.0f); glVertex3i(0, 1, 0);
+      glTexCoord2f(1.0f, 0.0f); glVertex3i(-1, -1, 1);
+      glTexCoord2f(0.0f, 1.0f); glVertex3i(1, -1, 1);
 
-      glVertex3i(0, 1, 0);
-      glVertex3i(1, -1, 1);
-      glVertex3i(1, -1, -1);
+      glTexCoord2f(0.0f, 0.0f); glVertex3i(0, 1, 0);
+      glTexCoord2f(1.0f, 0.0f); glVertex3i(1, -1, 1);
+      glTexCoord2f(0.0f, 1.0f); glVertex3i(1, -1, -1);
 
-      glVertex3i(0, 1, 0);
-      glVertex3i(1, -1, -1);
-      glVertex3i(-1, -1, -1);
+      glTexCoord2f(0.0f, 0.0f); glVertex3i(0, 1, 0);
+      glTexCoord2f(1.0f, 0.0f); glVertex3i(1, -1, -1);
+      glTexCoord2f(0.0f, 1.0f); glVertex3i(-1, -1, -1);
 
-      glVertex3i(0, 1, 0);
-      glVertex3i(-1, -1, -1);
-      glVertex3i(-1, -1, 1);
+      glTexCoord2f(0.0f, 0.0f); glVertex3i(0, 1, 0);
+      glTexCoord2f(1.0f, 0.0f); glVertex3i(-1, -1, -1);
+      glTexCoord2f(0.0f, 1.0f); glVertex3i(-1, -1, 1);
     glEnd();
 
     glBegin(GL_QUADS);
-      glVertex3i(-1, -1, 1);
-      glVertex3i(1, -1, 1);
-      glVertex3i(1, -1, -1);
-      glVertex3i(-1, -1, -1);
+      glTexCoord2f(1.0f, 0.0f); glVertex3i(-1, -1, 1);
+      glTexCoord2f(1.0f, 1.0f); glVertex3i(1, -1, 1);
+      glTexCoord2f(0.0f, 1.0f); glVertex3i(1, -1, -1);
+      glTexCoord2f(0.0f, 0.0f); glVertex3i(-1, -1, -1);
     glEnd();
   glPopMatrix();
 }
@@ -133,11 +133,17 @@ void drawRect(GLfloat x, GLfloat y, GLfloat z, GLfloat sx, GLfloat sy, GLfloat s
 }
 
 void drawSphere(GLfloat x, GLfloat y, GLfloat z, GLfloat radius) {
+  GLUquadricObj *sphere = gluNewQuadric();
   glPushMatrix();
     glTranslatef(x, y, z);
     glScalef(radius, radius, radius);
     glRotatef(-90, 1, 0, 0);
-    glutSolidSphere(1, 20, 20);
+
+    gluQuadricDrawStyle(sphere, GLU_FILL);
+    gluQuadricTexture(sphere, true);
+    gluQuadricNormals(sphere, GLU_SMOOTH);
+    //glutSolidSphere(1, 20, 20);
+    gluSphere(sphere,1.0,20,20);
   glPopMatrix();
 }
 
@@ -145,6 +151,7 @@ void drawDome(GLfloat x, GLfloat y, GLfloat z, GLfloat radius, GLfloat bottom, G
   GLdouble eqnBottom[4] = {0.0, 0.0, 1.0, bottom};
   GLdouble eqnTop[4] = {0.0, 0.0, -1.0, top};
 
+  GLUquadricObj *sphere = gluNewQuadric();
   glPushMatrix();
     glTranslatef(x, y, z);
     glScalef(radius, radius, radius);
@@ -155,7 +162,12 @@ void drawDome(GLfloat x, GLfloat y, GLfloat z, GLfloat radius, GLfloat bottom, G
 
     glClipPlane(GL_CLIP_PLANE1, eqnTop);
     glEnable(GL_CLIP_PLANE1);
-    glutSolidSphere(1, 30, 30);
+    //glutSolidSphere(1, 30, 30);
+    gluQuadricDrawStyle(sphere, GLU_FILL);
+    gluQuadricTexture(sphere, true);
+    gluQuadricNormals(sphere, GLU_SMOOTH);
+
+    gluSphere(sphere,1.0,30,30);
 
     glDisable(GL_CLIP_PLANE0);
     glDisable(GL_CLIP_PLANE1);
@@ -170,6 +182,7 @@ void drawCylinder(GLfloat x, GLfloat y, GLfloat z, GLdouble radius, GLdouble hei
         glScalef(radius, radius, height);
 
         gluQuadricDrawStyle(obj, GLU_FILL);
+        gluQuadricTexture(obj, true);
         gluCylinder(obj, 1, 1, 1, 6, 2);
   glPopMatrix();
 }
@@ -187,6 +200,7 @@ void drawCylinderWithCut(GLfloat x, GLfloat y, GLfloat z, GLdouble radius, GLdou
     glEnable (GL_CLIP_PLANE0);
 
     gluQuadricDrawStyle(obj, GLU_FILL);
+    gluQuadricTexture(obj, true);
     gluCylinder(obj, 1, 1, 1, 30, 2);
 
     glDisable(GL_CLIP_PLANE0);
@@ -201,6 +215,7 @@ void drawDisk(GLfloat x, GLfloat y, GLfloat z, GLdouble innerRadius, GLdouble ou
     glRotatef(270.0, 1.0, 0.0, 0.0);
 
     gluQuadricDrawStyle(obj, GLU_FILL);
+    gluQuadricTexture(obj, true);
     gluCylinder(obj, outerRadius, innerRadius, 0, 6, 2);
   glPopMatrix();
 }
@@ -275,7 +290,8 @@ void drawDoor(){
     glRotatef(doorAngle, 0, 1, 0);
     glTranslatef(2, 0, 0);
     glScalef(4, 2.25, 0.15);
-    glutSolidCube(1);
+    //glutSolidCube(1);
+    drawRect(0,0,0,1,1,1);
   glPopMatrix();
 }
 
