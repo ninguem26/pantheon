@@ -360,11 +360,11 @@ void desenha(void) {
   rgb(216,194,145);
   drawRect(4, -1.25, 4.5, 0.3, 6.3, 4);
   drawRect(-4, -1.25, 4.5, 0.3, 6.3, 4);
-  drawRect(0, 2, 4.5, 8.3, 0.3, 4);
+  drawRect(0, 2.05, 4.5, 8.3, 0.3, 4);
 
-  drawRect(3, -2.25, 6.35, 2, 4.5, 0.3);
-  drawRect(-3, -2.25, 6.35, 2, 4.5, 0.3);
-  drawRect(0, -0.125, 6.35, 7.7, 4.1, 0.3);
+  drawRect(2.925, -3.3, 6.35, 1.85, 2.2, 0.3);
+  drawRect(-2.925, -3.3, 6.35, 1.85, 2.2, 0.3);
+  drawRect(0, -0.15, 6.35, 7.7, 4.1, 0.3);
 
   //Colunas
   rgb(145,131,101);
@@ -438,7 +438,7 @@ void desenha(void) {
   rgb(142, 130, 118);
   drawCylinder(0, -4.5, 15, 1.5, 0.5);
   drawCylinder(0, -4.5, 15, 1.3, 0.5);
-  drawDisk(0, -4.25, 15, 1.3, 1.5);
+  drawDisk(0, -4, 15, 1.3, 1.5);
 
   rgb(137, 121, 104);
   drawRect(0, -4., 15, 0.75, 0.75, 0.75);
@@ -499,9 +499,6 @@ void inicializa (void) {
 
   glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
-  sf::Image img_data[2];
-  img_data[0].loadFromFile("stones.jpg");
-  img_data[1].loadFromFile("old_wall.jpg");
   glGenTextures(2, texture_handle);
 
   loadTexture(texture_handle[0], "stones.jpg");
