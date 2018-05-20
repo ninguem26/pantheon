@@ -6,6 +6,16 @@
 #define WIRE 0
 #define FILL 1
 
+#define CONCRETE 0
+#define WOOD 1
+#define GOLD 2
+#define MARBLE 3
+#define WALL 4
+#define STATUE 5
+#define WATER 6
+#define INTERIOR 7
+#define ROTUNDA 8
+
 // Camera
 GLdouble phi = M_PI / 2, theta = 0, radius = 15;
 
@@ -167,7 +177,7 @@ void drawDome(GLfloat x, GLfloat y, GLfloat z, GLfloat radius, GLfloat bottom, G
     gluQuadricTexture(sphere, true);
     gluQuadricNormals(sphere, GLU_SMOOTH);
 
-    gluSphere(sphere,1.0,30,30);
+    gluSphere(sphere,1.0,50,50);
 
     glDisable(GL_CLIP_PLANE0);
     glDisable(GL_CLIP_PLANE1);
@@ -265,7 +275,7 @@ void drawCandelabro(GLfloat x, GLfloat y, GLfloat z, GLfloat scale, GLfloat angl
         glScalef(scale, scale, scale);
         glRotatef(angle, 0, 1, 0);
 
-        rgb(255,255,0);
+        glBindTexture(GL_TEXTURE_2D, texture_handle[GOLD]);
         drawCylinder(0,0,0,0.2,0.2);
         drawDisk(0,0.2,0,0,0.2);
         drawCylinder(0,0.2,0,0.05,1);
@@ -276,7 +286,7 @@ void drawCandelabro(GLfloat x, GLfloat y, GLfloat z, GLfloat scale, GLfloat angl
         drawDisk(0.3,0.83,0,0,0.1);
         drawDisk(-0.3,0.83,0,0,0.1);
         drawDisk(0,1.2,0,0,0.1);
-        rgb(255,255,255);
+        glBindTexture(GL_TEXTURE_2D, texture_handle[MARBLE]);
         drawRect(0.3,0.93,0,0.05,0.2,0.05);
         drawRect(-0.3,0.93,0,0.05,0.2,0.05);
         drawRect(0.4,0.53,0,0.05,0.2,0.05);
@@ -296,7 +306,7 @@ void drawDoor(){
 }
 
 void drawOratorio(){
-  rgb(145,131,101);
+  glBindTexture(GL_TEXTURE_2D, texture_handle[MARBLE]);
   drawRect(0, -4.3, 0, 1.4, 0.4, 0.7);
 
   drawCylinder(0.6, -4.3, 0, .1, 2);
@@ -309,7 +319,6 @@ void drawOratorio(){
     glTranslatef(0, -1.9, 0);
     glScalef(.2, .2, .3);
 
-    rgb(140,93,22);
     glPushMatrix();
       glTranslatef(-2, -0.3, 0);
       glRotatef(30, 0, 0, 1);
@@ -326,8 +335,8 @@ void drawOratorio(){
 
   glPopMatrix();
 
-  rgb(1, 1, 1);
-  drawRect(0, -3.5, 0, 0.7, 1.4, 0.1);
+  glBindTexture(GL_TEXTURE_2D, texture_handle[STATUE]);
+  drawRect(0, -3.3, 0, 0.7, 1.4, 0);
 }
 
 // Função callback chamada para gerenciar eventos do mouse
@@ -342,22 +351,24 @@ void mouseFunc(int button, int state, int x, int y) {
 void desenha(void) {
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-  glBindTexture(GL_TEXTURE_2D, texture_handle[1]);
   //Piso
-  rgb(89,87,84);
+  glBindTexture(GL_TEXTURE_2D, texture_handle[CONCRETE]);
   drawRect(0, -4.5, 7, 11, 0.3, 24);
 
   //Rotunda
-  rgb(145,131,101);
+  glBindTexture(GL_TEXTURE_2D, texture_handle[ROTUNDA]);
   drawDome(0, 0, 0, 4.5, 0,0.97);
+  glBindTexture(GL_TEXTURE_2D, texture_handle[WALL]);
   drawDome(0, 0, 0, 4.8, 0, 0.97);
 
   //Cilindros
-  rgb(191,169,135);
+  
+  glBindTexture(GL_TEXTURE_2D, texture_handle[INTERIOR]);
   drawCylinderWithCut(0, -4.5, 0, 4.5, 4.5, 0.85);
+  glBindTexture(GL_TEXTURE_2D, texture_handle[WALL]);
   drawCylinderWithCut(0, -4.5, 0, 4.8, 4.5, 0.85);
 
-  rgb(216,194,145);
+  //Portico
   drawRect(4, -1.25, 4.5, 0.3, 6.3, 4);
   drawRect(-4, -1.25, 4.5, 0.3, 6.3, 4);
   drawRect(0, 2, 4.5, 8.3, 0.3, 4);
@@ -367,17 +378,16 @@ void desenha(void) {
   drawRect(0, -0.125, 6.35, 7.7, 4.1, 0.3);
 
   //Colunas
-  rgb(145,131,101);
+  glBindTexture(GL_TEXTURE_2D, texture_handle[MARBLE]);
   drawColumnLine(0, -4.5, 6.85, 8, 1);
   drawColumnLine(0, -4.5, 7.85, 8, 1);
   drawColumnLine(0, -4.5, 8.85, 8, 1);
   drawColumnLine(0, -4.5, 9.85, 8,1);
 
-  glBindTexture(GL_TEXTURE_2D, texture_handle[0]);
   //Telhado
+  glBindTexture(GL_TEXTURE_2D, texture_handle[MARBLE]);
   drawRect(0, -1.5, 8.5, 8.3, 0.3, 4);
 
-  rgb(140,93,22);
   glPushMatrix();
     glTranslatef(-2, -0.3, 8.5);
     glRotatef(30, 0, 0, 1);
@@ -390,23 +400,23 @@ void desenha(void) {
     drawRect(0, 0, 0, 4.8, 0.3, 3.9);
   glPopMatrix();
 
-  rgb(191,169,135);
+  glBindTexture(GL_TEXTURE_2D, texture_handle[MARBLE]);
   drawTriangle(-4.15, -1.5, 4.15, -1.5, 0, 1, 10.3);
 
   //Mesa
-  rgb(140,93,22);
+  glBindTexture(GL_TEXTURE_2D, texture_handle[WOOD]);
   drawRect(0, -4.05, -3, 2, 1, 1);
 
-  rgb(216, 194, 104);
+  glBindTexture(GL_TEXTURE_2D, texture_handle[GOLD]);
   drawPyramidLine(0, -3.05, -3, 5, 0.4);
 
   //Cruz da mesa
-  rgb(255,215,0);
+  glBindTexture(GL_TEXTURE_2D, texture_handle[WOOD]);
   drawRect(0, -2.5, -3, 0.08, 0.5, 0.08);
   drawRect(0, -2.4, -3, 0.3, 0.08, 0.08);
 
   //Cadeiras
-  rgb(140,93,22);
+  glBindTexture(GL_TEXTURE_2D, texture_handle[WOOD]);
   drawBench(-2, -4.1, -1.5, 0.05, 0, 180, 0);
   drawBench(-0.8, -4.1, -1.5, 0.05, 0, 180, 0);
   drawBench(2, -4.1, -1.5, 0.05, 0, 180, 0);
@@ -421,7 +431,6 @@ void desenha(void) {
   drawBench(0.8, -4.1, -0.5, 0.05, 0, 180, 0);
 
   //Oratorio
-
   glPushMatrix();
     glTranslatef(-2.3, 0, -3);
     glRotatef(45, 0, 1, 0);
@@ -435,29 +444,28 @@ void desenha(void) {
   glPopMatrix();
 
   //Obelisco
-  rgb(142, 130, 118);
+  glBindTexture(GL_TEXTURE_2D, texture_handle[MARBLE]);
   drawCylinder(0, -4.5, 15, 1.5, 0.5);
   drawCylinder(0, -4.5, 15, 1.3, 0.5);
+  
   drawDisk(0, -4.25, 15, 1.3, 1.5);
 
-  rgb(137, 121, 104);
   drawRect(0, -4., 15, 0.75, 0.75, 0.75);
 
-  rgb(107, 93, 79);
   drawPyramid(0, -2, 15, 0.2, 2, 0.2);
 
-  rgb(0, 255, 255);
+  glBindTexture(GL_TEXTURE_2D, texture_handle[WATER]);
   drawDisk(0, -4.25, 15, 0.2, 1.3);
 
   //Porta
-  rgb(102, 45, 25);
-
+  glBindTexture(GL_TEXTURE_2D, texture_handle[WOOD]);
   glPushMatrix();
     glTranslatef(-2, -3.375, 6.35);
     drawDoor();
   glPopMatrix();
 
   //Candelabros
+
   drawCandelabro(4,-4.3,0,1,90);
   drawCandelabro(-4,-4.3,0,1,90);
   drawCandelabro(3,-4.3,5.3,1,90);
@@ -467,9 +475,9 @@ void desenha(void) {
 }
 
 void inicializa (void) {
-  GLfloat luzAmbiente[4] = {0.2, 0.2, 0.2, 1.0};
+  GLfloat luzAmbiente[4] = {0.3, 0.3, 0.3, 1.0};
   GLfloat luzDifusa[4]={0.4, 0.4, 0.4, 1.0};
-  GLfloat posicaoLuz[4]={0.0, 50.0, 0.0, 1.0};
+  GLfloat posicaoLuz[4]={0.0, 20.0, 30.0, 1.0};
 
   glShadeModel(GL_SMOOTH);
 
@@ -499,14 +507,27 @@ void inicializa (void) {
 
   glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
-  sf::Image img_data[2];
-  img_data[0].loadFromFile("stones.jpg");
-  img_data[1].loadFromFile("old_wall.jpg");
-  glGenTextures(2, texture_handle);
+  sf::Image img_data[9];
+  img_data[0].loadFromFile("concrete.jpg");
+  img_data[1].loadFromFile("wood.jpg");
+  img_data[2].loadFromFile("gold.jpg");
+  img_data[3].loadFromFile("marble.jpg");
+  img_data[4].loadFromFile("wall.jpg");
+  img_data[5].loadFromFile("statue.png");
+  img_data[6].loadFromFile("agua.jpg");
+  img_data[7].loadFromFile("interior.png");
+  img_data[8].loadFromFile("rotunda.png");
+  glGenTextures(9, texture_handle);
 
-  loadTexture(texture_handle[0], "stones.jpg");
-  loadTexture(texture_handle[1], "old_wall.jpg");
-
+  loadTexture(texture_handle[0], "concrete.jpg");
+  loadTexture(texture_handle[1], "wood.jpg");
+  loadTexture(texture_handle[2], "gold.jpg");
+  loadTexture(texture_handle[3], "marble.jpg");
+  loadTexture(texture_handle[4], "wall.jpg");
+  loadTexture(texture_handle[5], "statue.png");
+  loadTexture(texture_handle[6], "agua.jpg");
+  loadTexture(texture_handle[7], "interior.png");
+  loadTexture(texture_handle[8], "rotunda.png");
   glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
 }
 
